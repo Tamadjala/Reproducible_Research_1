@@ -1,4 +1,17 @@
 ---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+   
+        
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
 output:
   pdf_document: default
   html_document: default
@@ -10,7 +23,6 @@ output:
 ```{r}
 #Reading the csv file
 activity <- read.csv("activity.csv")
-
 #Preprocessing the data (removing the NA's)
 subactivity <- na.omit(activity)
 ```
@@ -24,9 +36,7 @@ subactivity <- na.omit(activity)
 ```{r}
 #Calculation the total number of steps taken per day
 step_perday <- aggregate(steps ~ date, subactivity, sum)
-
 #Histogram of the number of daily steps
-
 hist(step_perday$steps, xlab = "Steps", main = "Histogram of Steps per Day")
 ```
 ```{r} 
@@ -40,11 +50,9 @@ median(step_perday$steps)
 ```{r}
 #The avetage steps per interval
 avergeStep_intv <- aggregate(steps ~ interval, subactivity, mean)
-
 plot(avergeStep_intv$interval, avergeStep_intv$steps,
      col = "blue", type = "l", xlab = "Inverval", ylab = "Steps",
      main = "Average Number of Steps per Inerval")
-
 # The interval that contain the maximum of steps
         max_index <- which.max(avergeStep_intv$steps)
         max <- avergeStep_intv[max_index,1]
@@ -60,7 +68,6 @@ Note that there are a number of days/intervals where there are missing values NA
 
 ```{r }
 sum(is.na(activity))
-
 colSums(is.na(activity))
 ```
 
@@ -82,15 +89,11 @@ for(i in 1:nrow(activity)){
 ```{r }
 #Lets calculate the new steps per day with the filled data activity
 NewStep_perday <- aggregate(steps ~ date, activity, sum)
-
 #Drawing the histogram
-
 hist(NewStep_perday$steps, xlab = "Steps per day",
      main ="Histogram of New Steps per Day")
-
 ##Compute the mean and median of the imputed value
 mean(NewStep_perday$steps)
-
 median(NewStep_perday$steps)
 ```
 
@@ -114,13 +117,10 @@ Now applying the function to the dataset to creat a new varible date
 ```{r }
 # Apply the week_day function and add a new column to activity dataset
 activity$day_type <- as.factor(sapply(activity$date, week_day))
-
 #load the ggplot library
 library(ggplot2)
-
 # Create the aggregated data frame by intervals and day_type
 steps_per_day_impute <- aggregate(steps ~ interval+day_type, activity, mean)
-
 # Create the plot
 g <- ggplot(steps_per_day_impute, aes(interval, steps)) +
     geom_line(stat = "identity", aes(colour = day_type)) +
@@ -130,9 +130,3 @@ g <- ggplot(steps_per_day_impute, aes(interval, steps)) +
     ggtitle("No of steps Per Interval by day type")
 print(g)
 ```
-
-
-
-
-
-
